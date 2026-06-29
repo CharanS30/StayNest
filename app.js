@@ -56,10 +56,16 @@ app.get("/listings/:id", async (req,res)=>{
 
 //Create Route
 app.post("/listings",async (req,res)=>{
-    let newListing=new Listing(req.body.listing);
-    await newListing.save();
-    // console.log(newListing);
-    res.redirect("/listings");
+    try{
+      const newListing=new Listing(req.body.listing);
+      await newListing.save();
+      // console.log(newListing);
+      res.redirect("/listings");
+    }
+    catch(err){
+      next(err);
+    }
+    
 });
 
 //Edit route
@@ -104,3 +110,8 @@ app.listen(8080, () => {
 //   console.log("sample was saved");
 //   res.send("successful with testing");
 // });
+
+//middleware for error handling
+app.use((err, req, res, next) => {
+  res.send("something went wrong");
+})
