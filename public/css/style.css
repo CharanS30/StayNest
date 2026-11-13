@@ -83,7 +83,7 @@ body {
 }
 
 /* Card Styling */
-.card{
+.listing-card{
     border: none !important;
     margin-bottom: 2rem;
 }
@@ -133,6 +133,20 @@ body {
     height: 30vh !important;
 }
 
+.edit-image-preview {
+    width: 300px;
+    height: 250px;
+    object-fit: cover;
+}
+
 .btns{
     display: flex;
+}
+
+/* map  */
+
+#map{
+    /* #map { position: absolute; top: 0; bottom: 0; width: 100%; } from website  */
+    height: 400px;
+    width: 80vh;
 }

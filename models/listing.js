@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
+const Review = require("./review.js");
 
 // defining the schema
 const listingSchema = new schema({
@@ -9,14 +10,8 @@ const listingSchema = new schema({
   },
   description: String,
   image: {
-    type: String,
-    //setting default value
-    default:
-      "https://unsplash.com/photos/an-aerial-view-of-a-beach-with-boats-in-the-water-bS6bgSp1f64",
-    set: (v) =>  // set for user when sending no image url
-      v === ""
-        ? "https://unsplash.com/photos/an-aerial-view-of-a-beach-with-boats-in-the-water-bS6bgSp1f64"
-        : v,
+    url: String,
+    filename: String,
   },
   price: {
     type: Number,
@@ -25,6 +20,33 @@ const listingSchema = new schema({
   },
   location: String,
   country: String,
+  reviews: [
+    {
+      type: schema.Types.ObjectId,
+      ref: "Review",
+    }
+  ],
+  owner:{
+    type: schema.Types.ObjectId,
+    ref: "User",
+  },
+  geometry: {
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ['Point'], // 'location.type' must be 'Point'
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  },
+});
+
+listingSchema.post("findOneAndDelete", async (listing) => { //post middleware to delete all reviews associated with a listing when the listing is deleted
+  if (listing){
+    await Review.deleteMany({ _id: { $in: listing.reviews } });
+  }
 });
 
 const Listing = mongoose.model("Listing", listingSchema);

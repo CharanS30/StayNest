@@ -1,0 +1,8 @@
+<!-- for displaying error in UI more user friendly way. -->
+<% layout("/layouts/boilerplate") %>
+<div class="row mt-3">
+    <div class="alert alert-danger col-6 offset-3" role="alert">
+        <h4><%= message %></h4>
+        <%# err.stack display is temporarily disabled %>
+    </div>
+</div>
